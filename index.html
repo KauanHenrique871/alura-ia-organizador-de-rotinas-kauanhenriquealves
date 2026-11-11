@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHRONOS 3D - Organizador de Rotinas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Canvas para Objetos 3D Tridimensionais Voando -->
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="container">
+    <header>
+      <h1>CHRONOS 3D</h1>
+      <p>Gerenciador e Organizador de Rotinas Pessoais & Profissionais</p>
+    </header>
+
+    <main class="routine-grid">
+
+      <!-- Card Estudo -->
+      <div class="card" data-title="Rotina de Estudos" data-info="Foco total no aprendizado de novas habilidades, programação e idiomas. Conteúdo estruturado por blocos Pomodoro." data-link="estudo.html">
+        <div class="card-icon">📚</div>
+        <h2>Estudo</h2>
+        <p>Aprimoramento contínuo, leituras técnicas, cursos online e sessões de foco diário.</p>
+        <div class="card-actions">
+          <button class="btn btn-secondary open-modal-btn">Detalhes Modal</button>
+          <a href="estudo.html" class="btn btn-primary">Acessar</a>
+        </div>
+      </div>
+
+      <!-- Card Trabalho -->
+      <div class="card" data-title="Rotina de Trabalho" data-info="Gerenciamento de projetos, reuniões de alinhamento, entregas de sprint e deep work produtivo." data-link="trabalho.html">
+        <div class="card-icon">💼</div>
+        <h2>Trabalho</h2>
+        <p>Organização de tarefas de alto impacto, metas semanais e fluxo de trabalho eficiente.</p>
+        <div class="card-actions">
+          <button class="btn btn-secondary open-modal-btn">Detalhes Modal</button>
+          <a href="trabalho.html" class="btn btn-primary">Acessar</a>
+        </div>
+      </div>
+
+      <!-- Card Lazer -->
+      <div class="card" data-title="Rotina de Lazer" data-info="Tempo dedicado para descanso da mente, encontros com amigos, filmes, jogos e relaxamento." data-link="lazer.html">
+        <div class="card-icon">🎮</div>
+        <h2>Lazer</h2>
+        <p>Momentos indispensáveis para descontrair, recarregar as energias e evitar o burnout.</p>
+        <div class="card-actions">
+          <button class="btn btn-secondary open-modal-btn">Detalhes Modal</button>
+          <a href="lazer.html" class="btn btn-primary">Acessar</a>
+        </div>
+      </div>
+
+      <!-- Card Hobby -->
+      <div class="card" data-title="Rotina de Hobbies" data-info="Prática de paixões pessoais: música, pintura, escrita criativa e jardinagem." data-link="hobby.html">
+        <div class="card-icon">🎨</div>
+        <h2>Hobby</h2>
+        <p>Projetos pessoais sem pressão de resultados, focados apenas na expressão criativa.</p>
+        <div class="card-actions">
+          <button class="btn btn-secondary open-modal-btn">Detalhes Modal</button>
+          <a href="hobby.html" class="btn btn-primary">Acessar</a>
+        </div>
+      </div>
+
+      <!-- Card Esportes -->
+      <div class="card" data-title="Rotina de Esportes" data-info="Treinos de musculação, corridas ao ar livre, natação e mobilidade articular diária." data-link="esportes.html">
+        <div class="card-icon">🏋️‍♂️</div>
+        <h2>Esportes</h2>
+        <p>Atividades físicas para alta performance, condicionamento e manutenção da energia.</p>
+        <div class="card-actions">
+          <button class="btn btn-secondary open-modal-btn">Detalhes Modal</button>
+          <a href="esportes.html" class="btn btn-primary">Acessar</a>
+        </div>
+      </div>
+
+      <!-- Card Saúde -->
+      <div class="card" data-title="Rotina de Saúde" data-info="Acompanhamento nutricional, meditação diária, higiene do sono e hidratação adequada." data-link="saude.html">
+        <div class="card-icon">🩺</div>
+        <h2>Saúde</h2>
+        <p>Cuidados fundamentais com o corpo e a mente para garantir longevidade e equilíbrio.</p>
+        <div class="card-actions">
+          <button class="btn btn-secondary open-modal-btn">Detalhes Modal</button>
+          <a href="saude.html" class="btn btn-primary">Acessar</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Estrutura do Modal -->
+  <div class="modal-overlay" id="custom-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Título do Modal</h3>
+        <button class="close-modal" id="close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-description">Descrição resumida da rotina selecionada.</p>
+        <ul>
+          <li><strong>Status:</strong> Em progresso</li>
+          <li><strong>Frequência:</strong> Diária / Semanal</li>
+          <li><strong>Prioridade:</strong> Alta</li>
+        </ul>
+        <a id="modal-page-link" href="#" class="btn btn-primary" style="width: 100%;">Ir para Página Completa</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Integrado -->
+  <script>
+    // =========================================================
+    // 1. SISTEMA 3D CANVAS (Objetos tridimensionais voando ao fundo)
+    // =========================================================
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    // Cores Degradê (Azul Violeta #4facfe, Magenta #f093fb, Ciano #00f2fe)
+    const colors = [
+      { r: 79, g: 172, b: 254 },  /* Azul */
+      { r: 0, g: 242, b: 254 },   /* Ciano */
+      { r: 240, g: 147, b: 251 }  /* Magenta */
+    ];
+
+    // Gerador de Formas 3D Flutuantes
+    class Shape3D {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = (Math.random() - 0.5) * width * 1.5;
+        this.y = (Math.random() - 0.5) * height * 1.5;
+        this.z = Math.random() * 1000 + 100; // Profundidade Z
+        this.size = Math.random() * 25 + 15;
+        this.vx = (Math.random() - 0.5) * 1.2;
+        this.vy = (Math.random() - 0.5) * 1.2;
+        this.vz = (Math.random() - 0.5) * 2;
+        this.rotX = Math.random() * Math.PI * 2;
+        this.rotY = Math.random() * Math.PI * 2;
+        this.vRotX = (Math.random() - 0.5) * 0.03;
+        this.vRotY = (Math.random() - 0.5) * 0.03;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.type = Math.floor(Math.random() * 3); // 0: Cubo 3D, 1: Pirâmide 3D, 2: Esfera/Círculo
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.z += this.vz;
+        this.rotX += this.vRotX;
+        this.rotY += this.vRotY;
+
+        // Reset ao sair da tela
+        if (this.z < 10 || this.z > 1200 || Math.abs(this.x) > width || Math.abs(this.y) > height) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        // Projeção 3D para 2D (Fórmula de Perspectiva)
+        const fov = 400;
+        const scale = fov / (fov + this.z);
+        const x2d = this.x * scale + width / 2;
+        const y2d = this.y * scale + height / 2;
+        const projectedSize = this.size * scale;
+
+        ctx.save();
+        ctx.translate(x2d, y2d);
+        ctx.rotate(this.rotX);
+
+        const alpha = Math.min(1, Math.max(0.1, (1000 - this.z) / 1000));
+        ctx.strokeStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha * 0.8})`;
+        ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha * 0.15})`;
+        ctx.lineWidth = 1.5 * scale;
+
+        if (this.type === 0) {
+          // Cubo 3D Representativo
+          ctx.beginPath();
+          ctx.strokeRect(-projectedSize / 2, -projectedSize / 2, projectedSize, projectedSize);
+          ctx.fillRect(-projectedSize / 2, -projectedSize / 2, projectedSize, projectedSize);
+          ctx.strokeRect(-projectedSize / 4, -projectedSize / 4, projectedSize, projectedSize);
+        } else if (this.type === 1) {
+          // Pirâmide / Triângulo 3D
+          ctx.beginPath();
+          ctx.moveTo(0, -projectedSize);
+          ctx.lineTo(projectedSize, projectedSize);
+          ctx.lineTo(-projectedSize, projectedSize);
+          ctx.closePath();
+          ctx.stroke();
+          ctx.fill();
+        } else {
+          // Esfera / Anel 3D
+          ctx.beginPath();
+          ctx.arc(0, 0, projectedSize, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    const shapes = Array.from({ length: 45 }, () => new Shape3D());
+
+    function animate() {
+      // Fundo Preto Profundo com rastro suave
+      ctx.fillStyle = 'rgba(8, 8, 16, 0.4)';
+      ctx.fillRect(0, 0, width, height);
+
+      shapes.forEach(shape => {
+        shape.update();
+        shape.draw();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // =========================================================
+    // 2. INTERATIVIDADE DOS CARDS E MODAL
+    // =========================================================
+    const modal = document.getElementById('custom-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-description');
+    const modalLink = document.getElementById('modal-page-link');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+      const openBtn = card.querySelector('.open-modal-btn');
+      
+      openBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Evita acionar clique do card
+        const title = card.getAttribute('data-title');
+        const info = card.getAttribute('data-info');
+        const link = card.getAttribute('data-link');
+
+        modalTitle.textContent = title;
+        modalDesc.textContent = info;
+        modalLink.setAttribute('href', link);
+
+        modal.classList.add('active');
+      });
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
